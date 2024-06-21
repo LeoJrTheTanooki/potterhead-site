@@ -60,11 +60,9 @@ export default function Home() {
     return data;
   };
 
-
   useEffect(() => {
     const loadData = async () => {
       const charArray = await getCharacterData();
-      console.log(charArray[0]);
       setWizardArray(charArray);
     };
     loadData();
@@ -116,153 +114,157 @@ export default function Home() {
   return (
     <div className="background">
       <h1 className=" text-3xl font-bold">Harry Potter Character Chart</h1>
-        <div className=" w-1/2">{wizardArrayJsx ? wizardArrayJsx : ""}</div>
-        <div className=" w-1/2 fixed inset-y-0 right-0 flex flex-wrap">
-          <div>
-            {image ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img className=" h-32" src={image} alt={"Picture of " + name} />
-            ) : (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img className=" h-32" src="/unknown.jpg" alt="Unknown Image" />
-            )}
-          </div>
-          <div>
-            {name ? (
-              <div className="border border-black">Name: {name}</div>
-            ) : (
-              ""
-            )}
-            {alternateNames && alternateNames.length > 0 ? (
+      <div className=" w-1/2">{wizardArrayJsx ? wizardArrayJsx : ""}</div>
+      <div className=" w-1/2 fixed inset-y-0 right-0 flex flex-wrap">
+        <div>
+          {image ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img className=" h-32" src={image} alt={"Picture of " + name} />
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img className=" h-32" src="/unknown.jpg" alt="Unknown Image" />
+          )}
+        </div>
+        <div>
+          {name ? <div className="border border-black">Name: {name}</div> : ""}
+          {alternateNames && alternateNames.length > 0 ? (
+            <div className="border border-black">
+              Alternate Names:{" "}
+              {alternateNames.map((e: any, i: number, arr: any) => {
+                return (
+                  <span key={i}>
+                    {e}
+                    {i != arr.length - 1 ? ", " : ""}
+                  </span>
+                );
+              })}
+            </div>
+          ) : (
+            ""
+          )}
+          {species ? (
+            <div className="border border-black">Species: {species}</div>
+          ) : (
+            ""
+          )}
+          {gender ? (
+            <div className="border border-black">Gender: {gender}</div>
+          ) : (
+            ""
+          )}
+          {house ? (
+            <div className="border border-black">House: {house}</div>
+          ) : (
+            ""
+          )}
+          {dateOfBirth ? (
+            <div className="border border-black">Birthday: {dateOfBirth}</div>
+          ) : (
+            ""
+          )}
+          {yearOfBirth ? (
+            <div className="border border-black">Birth Year: {yearOfBirth}</div>
+          ) : (
+            ""
+          )}
+          {wizardIndex > -1 ? (
+            <>
               <div className="border border-black">
-                Alternate Names:{" "}
-                {alternateNames.map((e: any, i: number, arr: any) => {
-                  console.log(e);
-                  return (
-                    <span key={i}>
-                      {e}
-                      {i != arr.length - 1 ? ", " : ""}
-                    </span>
-                  );
-                })}
+                Wizard: {alive ? "Yes" : "No"}
               </div>
-            ) : (
-              ""
-            )}
-            {species ? (
-              <div className="border border-black">Species: {species}</div>
-            ) : (
-              ""
-            )}
-            {gender ? (
-              <div className="border border-black">Gender: {gender}</div>
-            ) : (
-              ""
-            )}
-            {house ? (
-              <div className="border border-black">House: {house}</div>
-            ) : (
-              ""
-            )}
-            {dateOfBirth ? (
-              <div className="border border-black">Birthday: {dateOfBirth}</div>
-            ) : (
-              ""
-            )}
-            {yearOfBirth ? (
-              <div className="border border-black">
-                Birth Year: {yearOfBirth}
-              </div>
-            ) : (
-              ""
-            )}
-            {wizard ? (
-              <div className="border border-black">Wizard: {wizard}</div>
-            ) : (
-              ""
-            )}
-            {ancestry ? (
-              <div className="border border-black">Ancestry: {ancestry}</div>
-            ) : (
-              ""
-            )}
-            {eyeColour ? (
-              <div className="border border-black">Eye Color: {eyeColour}</div>
-            ) : (
-              ""
-            )}
-            {hairColour ? (
-              <div className="border border-black">
-                Hair Color: {hairColour}
-              </div>
-            ) : (
-              ""
-            )}
-            {wand ? (
-              <div className="border border-black">Wand Wood: {wand.wood}</div>
-            ) : (
-              ""
-            )}
-            {wand ? (
-              <div className="border border-black">Wand Core: {wand.core}</div>
-            ) : (
-              ""
-            )}
-            {wand ? (
-              <div className="border border-black">
-                Wand Length: {wand.length}
-              </div>
-            ) : (
-              ""
-            )}
-            {patronus ? (
-              <div className="border border-black">Patronus: {patronus}</div>
-            ) : (
-              ""
-            )}
-            {wizardIndex > -1 ? (
-              <>
+            </>
+          ) : (
+            ""
+          )}
+          {ancestry ? (
+            <div className="border border-black">Ancestry: {ancestry}</div>
+          ) : (
+            ""
+          )}
+          {eyeColour ? (
+            <div className="border border-black">Eye Color: {eyeColour}</div>
+          ) : (
+            ""
+          )}
+          {hairColour ? (
+            <div className="border border-black">Hair Color: {hairColour}</div>
+          ) : (
+            ""
+          )}
+          {wand ? (
+            <>
+              {wand.wood ? (
                 <div className="border border-black">
-                  Hogwarts Student: {hogwartsStudent ? "Yes" : "No"}
+                  Wand Wood: {wand.wood}
                 </div>
+              ) : (
+                ""
+              )}
+              {wand.core ? (
                 <div className="border border-black">
-                  Hogwarts Staff: {hogwartsStaff ? "Yes" : "No"}
+                  Wand Core: {wand.core}
                 </div>
-              </>
-            ) : (
-              ""
-            )}
-            {actor ? (
-              <div className="border border-black">Actor: {actor}</div>
-            ) : (
-              ""
-            )}
-            {alternateActors && alternateActors.length > 0 ? (
+              ) : (
+                ""
+              )}
+              {wand.length ? (
+                <div className="border border-black">
+                  Wand Length: {wand.length}
+                </div>
+              ) : (
+                ""
+              )}
+            </>
+          ) : (
+            ""
+          )}
+          {patronus ? (
+            <div className="border border-black">Patronus: {patronus}</div>
+          ) : (
+            ""
+          )}
+          {wizardIndex > -1 ? (
+            <>
               <div className="border border-black">
-                Alternate Actors:{" "}
-                {alternateActors.map((e: any, i: number, arr: any) => {
-                  console.log(e);
-                  return (
-                    <span key={i}>
-                      {e}
-                      {i != arr.length - 1 ? ", " : ""}
-                    </span>
-                  );
-                })}
+                Hogwarts Student: {hogwartsStudent ? "Yes" : "No"}
               </div>
-            ) : (
-              ""
-            )}
-            {wizardIndex > -1 ? (
-              <>
-                <div className="border border-black">
-                  Alive: {alive ? "Yes" : "No"}
-                </div>
-              </>
-            ) : (
-              ""
-            )}
-          </div>
+              <div className="border border-black">
+                Hogwarts Staff: {hogwartsStaff ? "Yes" : "No"}
+              </div>
+            </>
+          ) : (
+            ""
+          )}
+          {actor ? (
+            <div className="border border-black">Actor: {actor}</div>
+          ) : (
+            ""
+          )}
+          {alternateActors && alternateActors.length > 0 ? (
+            <div className="border border-black">
+              Alternate Actors:{" "}
+              {alternateActors.map((e: any, i: number, arr: any) => {
+                return (
+                  <span key={i}>
+                    {e}
+                    {i != arr.length - 1 ? ", " : ""}
+                  </span>
+                );
+              })}
+            </div>
+          ) : (
+            ""
+          )}
+          {wizardIndex > -1 ? (
+            <>
+              <div className="border border-black">
+                Status: {alive ? "Alive" : "Dead"}
+              </div>
+            </>
+          ) : (
+            ""
+          )}
+        </div>
       </div>
     </div>
   );
