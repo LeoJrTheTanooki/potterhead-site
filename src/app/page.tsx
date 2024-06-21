@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "flowbite-react";
+import { Button, Modal } from "flowbite-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -26,6 +26,7 @@ export default function Home() {
   const [alternateActors, setAlternateActors] = useState<any>();
   const [alive, setAlive] = useState<any>();
   const [image, setImage] = useState<any>();
+  const [openModal, setOpenModal] = useState(false);
 
   interface ICharacter {
     id: string;
@@ -72,10 +73,11 @@ export default function Home() {
     if (wizardArray) {
       const jsxLoad = wizardArray.map((e: ICharacter, index: number) => {
         return (
-          <div key={index} className=" my-1">
+          <div key={index}>
             <Button
               onClick={() => {
                 setWizardIndex(index);
+                setOpenModal(true);
               }}
             >
               {e.name}
@@ -111,161 +113,218 @@ export default function Home() {
     }
   }, [wizardArray, wizardIndex]);
 
+  const indexLoop = (
+    param: any,
+    index: number,
+    setIndex: React.Dispatch<React.SetStateAction<number>>,
+    isIncrememting: boolean
+  ) => {
+    if (isIncrememting) {
+      index++;
+      if (param.length > index) {
+        setIndex(index);
+      } else {
+        setIndex(0);
+      }
+    } else {
+      index--;
+      if (index > -1) {
+        setIndex(index);
+      } else {
+        setIndex(param.length - 1);
+      }
+    }
+  };
+
   return (
     <div className="background">
       <h1 className=" text-3xl font-bold">Harry Potter Character Chart</h1>
-      <div className=" w-1/2">{wizardArrayJsx ? wizardArrayJsx : ""}</div>
-      <div className=" w-1/2 fixed inset-y-0 right-0 flex flex-wrap">
-        <div>
-          {image ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img className=" h-32" src={image} alt={"Picture of " + name} />
-          ) : (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img className=" h-32" src="/unknown.jpg" alt="Unknown Image" />
-          )}
-        </div>
-        <div>
-          {name ? <div className="border border-black">Name: {name}</div> : ""}
-          {alternateNames && alternateNames.length > 0 ? (
-            <div className="border border-black">
-              Alternate Names:{" "}
-              {alternateNames.map((e: any, i: number, arr: any) => {
-                return (
-                  <span key={i}>
-                    {e}
-                    {i != arr.length - 1 ? ", " : ""}
-                  </span>
-                );
-              })}
-            </div>
-          ) : (
-            ""
-          )}
-          {species ? (
-            <div className="border border-black">Species: {species}</div>
-          ) : (
-            ""
-          )}
-          {gender ? (
-            <div className="border border-black">Gender: {gender}</div>
-          ) : (
-            ""
-          )}
-          {house ? (
-            <div className="border border-black">House: {house}</div>
-          ) : (
-            ""
-          )}
-          {dateOfBirth ? (
-            <div className="border border-black">Birthday: {dateOfBirth}</div>
-          ) : (
-            ""
-          )}
-          {yearOfBirth ? (
-            <div className="border border-black">Birth Year: {yearOfBirth}</div>
-          ) : (
-            ""
-          )}
-          {wizardIndex > -1 ? (
-            <>
-              <div className="border border-black">
-                Wizard: {alive ? "Yes" : "No"}
-              </div>
-            </>
-          ) : (
-            ""
-          )}
-          {ancestry ? (
-            <div className="border border-black">Ancestry: {ancestry}</div>
-          ) : (
-            ""
-          )}
-          {eyeColour ? (
-            <div className="border border-black">Eye Color: {eyeColour}</div>
-          ) : (
-            ""
-          )}
-          {hairColour ? (
-            <div className="border border-black">Hair Color: {hairColour}</div>
-          ) : (
-            ""
-          )}
-          {wand ? (
-            <>
-              {wand.wood ? (
-                <div className="border border-black">
-                  Wand Wood: {wand.wood}
-                </div>
-              ) : (
-                ""
-              )}
-              {wand.core ? (
-                <div className="border border-black">
-                  Wand Core: {wand.core}
-                </div>
-              ) : (
-                ""
-              )}
-              {wand.length ? (
-                <div className="border border-black">
-                  Wand Length: {wand.length}
-                </div>
-              ) : (
-                ""
-              )}
-            </>
-          ) : (
-            ""
-          )}
-          {patronus ? (
-            <div className="border border-black">Patronus: {patronus}</div>
-          ) : (
-            ""
-          )}
-          {wizardIndex > -1 ? (
-            <>
-              <div className="border border-black">
-                Hogwarts Student: {hogwartsStudent ? "Yes" : "No"}
-              </div>
-              <div className="border border-black">
-                Hogwarts Staff: {hogwartsStaff ? "Yes" : "No"}
-              </div>
-            </>
-          ) : (
-            ""
-          )}
-          {actor ? (
-            <div className="border border-black">Actor: {actor}</div>
-          ) : (
-            ""
-          )}
-          {alternateActors && alternateActors.length > 0 ? (
-            <div className="border border-black">
-              Alternate Actors:{" "}
-              {alternateActors.map((e: any, i: number, arr: any) => {
-                return (
-                  <span key={i}>
-                    {e}
-                    {i != arr.length - 1 ? ", " : ""}
-                  </span>
-                );
-              })}
-            </div>
-          ) : (
-            ""
-          )}
-          {wizardIndex > -1 ? (
-            <>
-              <div className="border border-black">
-                Status: {alive ? "Alive" : "Dead"}
-              </div>
-            </>
-          ) : (
-            ""
-          )}
-        </div>
+      <div className=" flex flex-wrap gap-1">
+        {wizardArrayJsx ? wizardArrayJsx : ""}
       </div>
+      <Modal show={openModal} onClose={() => setOpenModal(false)}>
+        <Modal.Header></Modal.Header>
+        <Modal.Body className=" flex justify-around">
+          <div>
+            {image ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img className=" h-40" src={image} alt={"Picture of " + name} />
+            ) : (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img className=" h-40" src="/unknown.jpg" alt="Unknown Image" />
+            )}
+          </div>
+          <div className=" w-full">
+            {name ? (
+              <div className="border border-black">Name: {name}</div>
+            ) : (
+              ""
+            )}
+            {alternateNames && alternateNames.length > 0 ? (
+              <div className="border border-black">
+                Alternate Names:{" "}
+                {alternateNames.map((e: any, i: number, arr: any) => {
+                  return (
+                    <span key={i}>
+                      {e}
+                      {i != arr.length - 1 ? ", " : ""}
+                    </span>
+                  );
+                })}
+              </div>
+            ) : (
+              ""
+            )}
+            {species ? (
+              <div className="border border-black">Species: {species}</div>
+            ) : (
+              ""
+            )}
+            {gender ? (
+              <div className="border border-black">Gender: {gender}</div>
+            ) : (
+              ""
+            )}
+            {house ? (
+              <div className="border border-black">House: {house}</div>
+            ) : (
+              ""
+            )}
+            {dateOfBirth ? (
+              <div className="border border-black">Birthday: {dateOfBirth}</div>
+            ) : (
+              ""
+            )}
+            {yearOfBirth ? (
+              <div className="border border-black">
+                Birth Year: {yearOfBirth}
+              </div>
+            ) : (
+              ""
+            )}
+            {wizardIndex > -1 ? (
+              <>
+                <div className="border border-black">
+                  Wizard: {alive ? "Yes" : "No"}
+                </div>
+              </>
+            ) : (
+              ""
+            )}
+            {ancestry ? (
+              <div className="border border-black">Ancestry: {ancestry}</div>
+            ) : (
+              ""
+            )}
+            {eyeColour ? (
+              <div className="border border-black">Eye Color: {eyeColour}</div>
+            ) : (
+              ""
+            )}
+            {hairColour ? (
+              <div className="border border-black">
+                Hair Color: {hairColour}
+              </div>
+            ) : (
+              ""
+            )}
+            {wand ? (
+              <>
+                {wand.wood ? (
+                  <div className="border border-black">
+                    Wand Wood: {wand.wood}
+                  </div>
+                ) : (
+                  ""
+                )}
+                {wand.core ? (
+                  <div className="border border-black">
+                    Wand Core: {wand.core}
+                  </div>
+                ) : (
+                  ""
+                )}
+                {wand.length ? (
+                  <div className="border border-black">
+                    Wand Length: {wand.length}
+                  </div>
+                ) : (
+                  ""
+                )}
+              </>
+            ) : (
+              ""
+            )}
+            {patronus ? (
+              <div className="border border-black">Patronus: {patronus}</div>
+            ) : (
+              ""
+            )}
+            {wizardIndex > -1 ? (
+              <>
+                <div className="border border-black">
+                  Hogwarts Student: {hogwartsStudent ? "Yes" : "No"}
+                </div>
+                <div className="border border-black">
+                  Hogwarts Staff: {hogwartsStaff ? "Yes" : "No"}
+                </div>
+              </>
+            ) : (
+              ""
+            )}
+            {actor ? (
+              <div className="border border-black">Actor: {actor}</div>
+            ) : (
+              ""
+            )}
+            {alternateActors && alternateActors.length > 0 ? (
+              <div className="border border-black">
+                Alternate Actors:{" "}
+                {alternateActors.map((e: any, i: number, arr: any) => {
+                  return (
+                    <span key={i}>
+                      {e}
+                      {i != arr.length - 1 ? ", " : ""}
+                    </span>
+                  );
+                })}
+              </div>
+            ) : (
+              ""
+            )}
+            {wizardIndex > -1 ? (
+              <>
+                <div className="border border-black">
+                  Status: {alive ? "Alive" : "Dead"}
+                </div>
+              </>
+            ) : (
+              ""
+            )}
+          </div>
+        </Modal.Body>
+        <Modal.Footer className="justify-between">
+          <div className="flex gap-1">
+            <Button
+              onClick={() =>
+                indexLoop(wizardArray, wizardIndex, setWizardIndex, false)
+              }
+            >
+              Prev
+            </Button>
+            <Button
+              onClick={() =>
+                indexLoop(wizardArray, wizardIndex, setWizardIndex, true)
+              }
+            >
+              Next
+            </Button>
+          </div>
+          <div>
+            <Button onClick={() => setOpenModal(false)}>Close</Button>
+          </div>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
